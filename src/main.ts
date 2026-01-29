@@ -43,6 +43,30 @@ async function bootstrap() {
   );
 
   /**
+   * Configura CORS (Cross-Origin Resource Sharing).
+   *
+   * Permite que a API seja acessada de diferentes origens (domínios).
+   * Essencial para aplicações frontend que consomem a API.
+   *
+   * Configurações:
+   * - origin: true - Permite todas as origens (development mode)
+   *   Para produção, especifique domínios permitidos: origin: ['https://app.example.com']
+   *
+   * - credentials: true - Permite envio de cookies e headers de autenticação
+   *
+   * - methods: Métodos HTTP permitidos (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+   *
+   * - allowedHeaders: Headers que o cliente pode enviar
+   *   Exemplo: 'Content-Type', 'Authorization', 'X-Requested-With'
+   */
+  app.enableCors({
+    origin: true, // Em produção, substituir por array de domínios permitidos
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  });
+
+  /**
    * Inicia servidor HTTP.
    * Porta configurável via variável de ambiente PORT (default: 3000).
    */
