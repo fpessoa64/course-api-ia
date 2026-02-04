@@ -18,6 +18,14 @@ This is a NestJS TypeScript API project (course-api-ia) with a **complete Produc
 - Automatic timestamp management
 - 100% test coverage (60 tests: 24 service + 14 controller + 22 e2e)
 
+✅ **CORS Configuration** - Cross-Origin Resource Sharing enabled
+- Allows API access from different origins (frontend applications)
+- Configured in [src/main.ts](src/main.ts)
+- Development mode: accepts all origins (origin: true)
+- Supports credentials (cookies, authorization headers)
+- Configured methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+- Production-ready structure (requires origin allowlist configuration)
+
 ## Essential Commands
 
 ### Development
@@ -610,6 +618,7 @@ npm install @nestjs/config
 - ✅ Error handling (NotFoundException)
 - ✅ Pagination infrastructure
 - ✅ Complete test coverage (unit + E2E)
+- ✅ CORS configuration (development mode, production-ready structure)
 
 ### Recommended for Production
 - Database integration (`@nestjs/typeorm`, `@nestjs/mongoose`) - **Priority**: Migrate from in-memory storage
@@ -619,7 +628,7 @@ npm install @nestjs/config
 - Logging (`@nestjs/winston`, `nestjs-pino`)
 - Global error handling (Exception Filters)
 - Rate limiting (`@nestjs/throttler`)
-- CORS configuration
+- CORS production configuration (replace `origin: true` with specific allowed domains)
 - Health checks (`@nestjs/terminus`)
 - Input sanitization
 - Helmet for security headers

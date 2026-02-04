@@ -67,6 +67,7 @@ This project includes a complete RESTful API for product management with paginat
 - ✅ Pagination with customizable page size
 - ✅ Soft delete (products are marked as inactive, not physically removed)
 - ✅ Automatic validation with class-validator
+- ✅ CORS enabled (Cross-Origin Resource Sharing for frontend integration)
 - ✅ In-memory storage (data resets on server restart)
 - ✅ Comprehensive test coverage (60 tests: 24 service + 14 controller + 22 e2e)
 - ✅ Detailed code comments in Portuguese
