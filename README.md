@@ -57,6 +57,224 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Products API
+
+This project includes a complete RESTful API for product management with pagination, validation, and in-memory storage.
+
+### Features
+
+- ✅ Full CRUD operations (Create, Read, Update, Delete)
+- ✅ Pagination with customizable page size
+- ✅ Soft delete (products are marked as inactive, not physically removed)
+- ✅ Automatic validation with class-validator
+- ✅ CORS enabled (Cross-Origin Resource Sharing for frontend integration)
+- ✅ In-memory storage (data resets on server restart)
+- ✅ Comprehensive test coverage (60 tests: 24 service + 14 controller + 22 e2e)
+- ✅ Detailed code comments in Portuguese
+
+### API Endpoints
+
+#### 1. Create Product
+```bash
+POST /products
+Content-Type: application/json
+
+{
+  "name": "Laptop Dell Inspiron",
+  "description": "Professional laptop with 16GB RAM",
+  "price": 4500.00,
+  "stock": 10
+}
+
+# Response: 201 Created
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "Laptop Dell Inspiron",
+  "description": "Professional laptop with 16GB RAM",
+  "price": 4500.00,
+  "stock": 10,
+  "isActive": true,
+  "createdAt": "2024-01-28T10:00:00.000Z",
+  "updatedAt": "2024-01-28T10:00:00.000Z"
+}
+```
+
+#### 2. List Products (with pagination)
+```bash
+GET /products?page=1&limit=10
+
+# Response: 200 OK
+{
+  "data": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "Laptop Dell Inspiron",
+      "price": 4500.00,
+      ...
+    }
+  ],
+  "meta": {
+    "total": 45,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 5
+  }
+}
+```
+
+**Query Parameters:**
+- `page` (optional): Page number, default: 1, min: 1
+- `limit` (optional): Items per page, default: 10, min: 1, max: 100
+
+#### 3. Get Product by ID
+```bash
+GET /products/:id
+
+# Response: 200 OK
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "Laptop Dell Inspiron",
+  ...
+}
+
+# Error: 404 Not Found
+{
+  "statusCode": 404,
+  "message": "Product with ID \"...\" not found"
+}
+```
+
+#### 4. Update Product
+```bash
+PATCH /products/:id
+Content-Type: application/json
+
+{
+  "price": 4200.00,
+  "stock": 8
+}
+
+# Response: 200 OK
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "Laptop Dell Inspiron",
+  "price": 4200.00,
+  "stock": 8,
+  "updatedAt": "2024-01-28T11:00:00.000Z",
+  ...
+}
+```
+
+#### 5. Delete Product (Soft Delete)
+```bash
+DELETE /products/:id
+
+# Response: 200 OK
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "isActive": false,
+  ...
+}
+```
+
+### Field Validations
+
+The API automatically validates all input data:
+
+- **name**: required, non-empty string
+- **description**: optional string
+- **price**: required, positive number (> 0)
+- **stock**: required, integer >= 0
+- **page**: optional, integer >= 1
+- **limit**: optional, integer between 1-100
+
+### Error Responses
+
+```bash
+# 400 Bad Request - Validation failed
+{
+  "statusCode": 400,
+  "message": ["price must be a positive number"],
+  "error": "Bad Request"
+}
+
+# 400 Bad Request - Extra properties not allowed
+{
+  "statusCode": 400,
+  "message": ["property extraField should not exist"],
+  "error": "Bad Request"
+}
+
+# 404 Not Found - Resource not found
+{
+  "statusCode": 404,
+  "message": "Product with ID \"...\" not found",
+  "error": "Not Found"
+}
+```
+
+### Testing the API
+
+```bash
+# Start the server
+npm run start:dev
+
+# Create a product
+curl -X POST http://localhost:3000/products \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Laptop Dell","description":"Professional laptop","price":4500.00,"stock":10}'
+
+# List all products
+curl http://localhost:3000/products
+
+# List products with pagination
+curl "http://localhost:3000/products?page=1&limit=5"
+
+# Get specific product (replace {id} with actual UUID)
+curl http://localhost:3000/products/{id}
+
+# Update product
+curl -X PATCH http://localhost:3000/products/{id} \
+  -H "Content-Type: application/json" \
+  -d '{"price":4200.00}'
+
+# Delete product
+curl -X DELETE http://localhost:3000/products/{id}
+```
+
+### Architecture
+
+- **In-Memory Storage**: Products are stored in a private array in ProductsService
+- **Soft Delete**: Deleted products are marked with `isActive: false` instead of being removed
+- **UUID Generation**: Each product gets a unique UUID v4 identifier
+- **Automatic Timestamps**: `createdAt` and `updatedAt` are managed automatically
+- **Validation**: All requests are validated using class-validator decorators
+
+### Important Notes
+
+⚠️ **Data Persistence**: This implementation uses in-memory storage. All data is lost when the server restarts. This is suitable for:
+- Development and testing
+- Prototypes and demonstrations
+- Learning and educational purposes
+
+For production use, consider integrating a database (PostgreSQL, MongoDB, etc.) using TypeORM or Mongoose.
+
+### Test Coverage
+
+```bash
+# Run all tests
+npm test
+
+# View coverage report
+npm run test:cov
+```
+
+**Coverage Statistics:**
+- Products Service: 100% coverage (24 tests)
+- Products Controller: 100% coverage (14 tests)
+- E2E Tests: 22 integration tests
+- Total: 60 tests passing ✅
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

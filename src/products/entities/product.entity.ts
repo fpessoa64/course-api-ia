@@ -27,7 +27,7 @@ export interface Product {
    * Campo opcional que fornece informações adicionais sobre o produto.
    * @example "Laptop profissional com processador Intel i7, 16GB RAM, SSD 512GB"
    */
-  description: string;
+  description?: string;
 
   /**
    * Preço do produto em reais (R$).
