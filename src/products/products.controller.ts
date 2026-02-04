@@ -14,7 +14,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import type { Product } from './entities/product.entity';
 import type { PaginatedResponseDto } from '../common/dto/paginated-response.dto';
-
+//
 /**
  * Controller responsável pelos endpoints REST da API de produtos.
  *
